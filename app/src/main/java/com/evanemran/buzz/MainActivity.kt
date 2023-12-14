@@ -10,37 +10,42 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.evanemran.buzz.presentation.chat.ChatScreen
+import com.evanemran.buzz.presentation.username.UsernameScreen
 import com.evanemran.buzz.ui.theme.BuzzTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            BuzzTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+            val navController = rememberNavController()
+            NavHost(
+                navController = navController,
+                startDestination = "username_screen"
+            ) {
+                composable("username_screen") {
+                    UsernameScreen(onNavigate = navController::navigate)
+                }
+                composable(
+                    route = "chat_screen/{username}",
+                    arguments = listOf(
+                        navArgument(name = "username") {
+                            type = NavType.StringType
+                            nullable = true
+                        }
+                    )
                 ) {
-                    Greeting("Android")
+                    val username = it.arguments?.getString("username")
+                    ChatScreen(username = username)
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    BuzzTheme {
-        Greeting("Android")
     }
 }

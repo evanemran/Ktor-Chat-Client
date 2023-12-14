@@ -3,6 +3,7 @@ package com.evanemran.buzz
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -18,6 +19,7 @@ import androidx.navigation.navArgument
 import com.evanemran.buzz.presentation.chat.ChatScreen
 import com.evanemran.buzz.presentation.username.UsernameScreen
 import com.evanemran.buzz.ui.theme.BuzzTheme
+import com.evanemran.buzz.ui.theme.backgroundColor
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,6 +29,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             NavHost(
+                modifier = Modifier
+                    .background(backgroundColor),
                 navController = navController,
                 startDestination = "username_screen"
             ) {
